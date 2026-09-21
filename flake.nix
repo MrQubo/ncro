@@ -11,7 +11,15 @@
     pkgsForEach = system: nixpkgs.legacyPackages.${system};
   in {
     nixosModules = {
-      ncro = ./nix/module.nix;
+      ncro = {
+        pkgs,
+        lib,
+        ...
+      }: {
+        imports = [./nix/module.nix];
+        services.ncro.package = lib.mkDefault self.packages.${pkgs.stdenv.hostPlatform.system}.ncro;
+      };
+
       default = self.nixosModules.ncro;
     };
 

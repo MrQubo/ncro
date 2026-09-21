@@ -284,10 +284,8 @@ in {
 
     package = mkOption {
       type = package;
-      default = pkgs.callPackage ./package.nix {};
-      defaultText = literalExpression "inputs.ncro.packages.$${system}.ncro";
+      example = literalExpression "inputs.ncro.packages.$${pkgs.stdenv.hostPlatform.system}.ncro";
       description = "The ncro package to use.";
-      example = literalExpression "inputs.ncro.packages.$${system}.ncro";
     };
 
     netrcFile = mkOption {
