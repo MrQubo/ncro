@@ -5,9 +5,10 @@
   pkg-config,
   openssl,
   cacert,
-  clang,
+  buildPackages,
   wild ? null,
 }: let
+  clangExe = "${buildPackages.clang}/bin/${stdenv.cc.targetPrefix}clang";
   # wild + clang are only used on Linux tier-1 arches
   hasWild =
     stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch64);
@@ -37,7 +38,7 @@ in
       [pkg-config cacert]
       ++ (lib.optionals hasWild [
         wild
-        clang
+        buildPackages.clang
       ]);
 
     buildInputs = [
@@ -54,7 +55,7 @@ in
         OPENSSL_NO_VENDOR = 1;
       }
       // lib.optionalAttrs hasWild {
-        RUSTFLAGS = "-Clinker=${clang}/bin/clang -Clink-arg=--ld-path=wild";
+        RUSTFLAGS = "-Clinker=${clangExe} -Clink-arg=--ld-path=wild";
       };
 
     meta = {

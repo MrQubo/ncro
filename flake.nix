@@ -17,7 +17,7 @@
         ...
       }: {
         imports = [./nix/module.nix];
-        services.ncro.package = lib.mkDefault self.packages.${pkgs.stdenv.hostPlatform.system}.ncro;
+        services.ncro.package = lib.mkDefault (pkgs.callPackage ./nix/package.nix {});
       };
 
       default = self.nixosModules.ncro;
